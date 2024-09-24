@@ -1,0 +1,41 @@
+name: java microservice CI
+
+on:
+  push:
+    branches:
+      - main
+#workflow_dispatch
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+  MODULE_NAME: ${{ vars.MODULE_NAME }}
+  TAG: ${{ vars.TAG }}
+  STACK_NAME: ${{ vars.STACK_NAME }}
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'corretto'
+        java-version: '17'
+        cache: 'maven'
+
+    - name: Uploading artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ebconfig
+
+    - name: Build with maven
+      run: ./mvnw clean install
