@@ -43,11 +43,12 @@ jobs:
             java-pipeline/Dockerrun.aws.config.json
 
       - name: Build Docker image
-        run: |
-          docker build -t $MODULE_FULLNAME $MODULE_NAME | \
-          docker tag $MODULE_FULLNAME:$TAG \
-          $REGISTRY_URL/$MODULE_FULLNAME:$TAG
-          
+        run: docker build -t $MODULE_FULLNAME $MODULE_NAME
+
+      - name: tagging
+        run: docker tag $MODULE_FULLNAME:$TAG \
+             $REGISTRY_URL/$MODULE_FULLNAME:$TAG
+
 
       - name: Authenticate Docker to AWS ECR
         run: |
