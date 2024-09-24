@@ -25,33 +25,33 @@ jobs:
       REGISTRY_URL: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com
 
   steps:
-      - name: checkout code
-      - uses: actions/checkout@v4
+    - name: checkout code
+    - uses: actions/checkout@v4
 
-      - name: Setup JDK 11
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'corretto'
-          java-version: '17'
-          cache: 'maven'
+    - name: Setup JDK 11
+    - uses: actions/setup-java@v4
+      with:
+        distribution: 'corretto'
+        java-version: '17'
+        cache: 'maven'
 
-      - name: Uploading artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ebconfig
-          path: |
-            java-pipeline/.elasticbeanstalk/config.yml
-            java-pipeline/Dockerrun.aws.config.json
+    - name: Uploading artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ebconfig
+        path: |
+          java-pipeline/.elasticbeanstalk/config.yml
+          java-pipeline/Dockerrun.aws.config.json
 
-      - name: Running docker build
-      - run: docker build -t $MODULE_FULLNAME $MODULE_NAME
-      - run: |
-          aws ecr get-login-password --region $AWS_REGION | \
-          docker login --username AWS --password-stdin $REGISTRY_URL
-      - run: docker push $REGISTRY_URL/$MODULE_FULLNAME:$TAG
+    - name: Running docker build
+    - run: docker build -t $MODULE_FULLNAME $MODULE_NAME
+    - run: |
+        aws ecr get-login-password --region $AWS_REGION | \
+        docker login --username AWS --password-stdin $REGISTRY_URL
+    - run: docker push $REGISTRY_URL/$MODULE_FULLNAME:$TAG
 
-      - name: Build with maven
-        run: ./mvnw clean install
+    - name: Build with maven
+      run: ./mvnw clean install
 
 deploy:
   runs-on: ubuntu-latest
@@ -60,7 +60,7 @@ deploy:
     - uses: actions/download-artifact@v4
       with:
         name: ebconfig
-        path: .
+        path: |
 
     - run: |
         sed -i='' "s/<AWS_ACCOUNT_ID>/$AWS_ACCOUNT_ID/" Dockerrun.aws.json && \
