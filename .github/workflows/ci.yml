@@ -36,7 +36,7 @@ jobs:
           cache: 'maven'
       - name: Navigate to project directory and build with Maven
         run: |
-          cd /java-pipeline  
+          cd java-pipeline  
           mvn clean install -DskipTests=false -B -X
 
       - name: Uploading artifact
