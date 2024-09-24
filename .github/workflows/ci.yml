@@ -33,9 +33,6 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
-          cache: 'maven'
-      - name: Navigate to project directory and build with Maven
-        run: mvn clean install -DskipTests=false -B package /java-pipeline/pom.xml
 
       - name: Uploading artifact
         uses: actions/upload-artifact@v4
