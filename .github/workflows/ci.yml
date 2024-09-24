@@ -34,9 +34,10 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
           cache: 'maven'
-
-      - name: Build with Maven
-        run: mvn clean install -DskipTests=false -B -X
+      - name: Navigate to project directory and build with Maven
+        run: |
+          cd /java-pipeline  
+          mvn clean install -DskipTests=false -B -X
 
       - name: Uploading artifact
         uses: actions/upload-artifact@v4
