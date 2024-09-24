@@ -43,7 +43,7 @@ jobs:
             java-pipeline/Dockerrun.aws.config.json
 
       - name: Build Docker image
-        run: docker build -t $MODULE_FULLNAME $MODULE_NAME
+        run: docker buildx build -t $MODULE_FULLNAME $MODULE_NAME
 
       - name: Authenticate Docker to AWS ECR
         run: |
